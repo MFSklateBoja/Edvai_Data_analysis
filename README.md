@@ -18,8 +18,6 @@
 - [Archivo `queries.sql`](#archivo-queriessql)
 
 
-
-
 ## 1. Presentación de la Temática
 La base de datos de "Ventas de Iowa" documenta transacciones comerciales en diversas categorías de productos en Iowa, Estados Unidos. El objetivo es proporcionar información sobre ventas, permitiendo análisis de patrones de consumo, rendimiento de productos y comportamiento de ventas por ubicación y temporalidad.
 
@@ -29,7 +27,15 @@ Los datos son públicos y se encuentran en BigQuery, recopilando información de
 - Inventario de tiendas en Iowa.
 - Información demográfica y geolocalización.
 
-## 3. Foco de Análisis
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/iowa.JPG)
+
+## 3. Plan de Métricas
+El [plan de metricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0) incluye:
+- **Análisis de ventas**: total de ventas, variación temporal, precios promedio, costos, ganancia y rentabilidad.
+- **Indicadores geográficos**: ventas por región.
+- **Análisis de productos**: rotación de productos y margen de ganancia.
+
+## 4. Foco de Análisis
 Los principales enfoques de análisis incluyen:
 - **Tendencias de consumo**: Categorías más vendidas y comportamiento de consumidores.
 - **Rendimiento de ventas por región**: Identificación de zonas con mayor actividad comercial.
@@ -45,7 +51,8 @@ Los principales enfoques de análisis incluyen:
 6. Los productos de menor precio tienen mayor rotación.
 7. Las botellas se venden en packs de 6 o 12.
 
-## 4. Descripción de la Base de Datos
+## 5. Descripción de la Base de Datos - Origen Bronze/Raw
+La capa raw incluye solo una tabla con las ventas en crudo para análisis geográfico y de inventario.
 La base de datos registra transacciones de bebidas alcohólicas. Los campos principales son:
 
 | Campo              | Descripción                                                    |
@@ -72,25 +79,92 @@ La base de datos registra transacciones de bebidas alcohólicas. Los campos prin
 | Bottles Sold       | Número de botellas vendidas                                    |
 | Sale (Dollars)     | Monto total de la venta en dólares                             |
 | Volume Sold (Liters)| Volumen total vendido en litros                                |
+ 
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva1.JPG)
 
-## 5. Modelo de Entidades y Relaciones - Origen Bronze/Raw
-La capa raw incluye una tabla con las ventas en crudo para análisis geográfico y de inventario.
+## 6. Transformación y carga de datos:
+El proyecto se estructura bajo una arquitectura Medallion (capas Bronze, Silver y Gold), como se represente en el sgte esquema.
 
-## 6. Plan de Métricas
-El [plan de metricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0) incluye:
-- **Análisis de ventas**: total de ventas, variación temporal, precios promedio, costos, ganancia y rentabilidad.
-- **Indicadores geográficos**: ventas por región.
-- **Análisis de productos**: rotación de productos y margen de ganancia.
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva5.JPG)
 
-## 7. Proceso ETL
+## 7. Proceso ETL - capa silver
+En la capa Silver se organizó la información en diferentes tablas, para lo cual se generaron sentencias DDL.
 - **Extracción**: Datos crudos desde sistemas de transacciones.
 - **Transformación**:
   - Limpieza de datos.
-  - Normalización de nombres de productos y categorías.
-  - Agregar columnas calculadas.
-- **Carga**: Datos transformados a BigQuery.
+  - Eliminación de datos nulos.
+  - Creación de tablas con datos unicos.
+  - Unificación de tipos de datos por columna.
+  - Agregación de columnas calculadas.
+- **Carga**: Datos transformados a BigQuery en capa silver.
 
-## 8. Modelo DER para Power BI
+### `queries.sql` (para las consultas SQL)
+
+```sql
+-- Crear tabla ventas en la capa Silver
+CREATE OR REPLACE TABLE `mi_proyecto_silver.ventas` AS 
+SELECT * FROM `bronzelayer-433922.mi_proyecto_bronce.ventas`
+WHERE invoice_and_item_number IS NOT NULL
+  AND date IS NOT NULL
+  AND store_number IS NOT NULL
+  AND item_number IS NOT NULL
+  AND vendor_number IS NOT NULL
+  AND category IS NOT NULL;
+
+-- Crear tabla de hechos (fact_sales)
+CREATE OR REPLACE TABLE `mi_proyecto_silver.fact_sales` AS 
+SELECT invoice_and_item_number, date, store_number, item_number, vendor_number, bottles_sold
+FROM `bronzelayer-433922.mi_proyecto_bronce.ventas`;
+
+-- Crear tabla de proveedores (dim_vendor)
+CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_vendor` AS 
+SELECT SAFE_CAST(vendor_number AS INT64) AS vendor_number, vendor_name
+FROM (
+  SELECT DISTINCT vendor_number, vendor_name
+  FROM `mi_proyecto_silver.ventas`
+  WHERE SAFE_CAST(vendor_number AS FLOAT64) IS NOT NULL
+);
+
+-- Crear tabla de productos (dim_product)
+CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_product` AS 
+SELECT SAFE_CAST(item_number AS INT64) AS item_number, item_description, category, pack, bottle_volume_ml, state_bottle_cost, state_bottle_retail
+FROM (
+  SELECT DISTINCT item_number, item_description, category, pack, bottle_volume_ml, state_bottle_cost, state_bottle_retail
+  FROM `mi_proyecto_silver.ventas`
+  WHERE SAFE_CAST(item_number AS FLOAT64) IS NOT NULL
+);
+
+-- Crear tabla de tiendas (dim_store)
+CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_store` AS 
+SELECT CAST(CAST(store_number AS FLOAT64) AS INT64) AS store_number, store_name, address, city, zip_code, county, store_location
+FROM (
+  SELECT DISTINCT store_number, store_name, address, city, zip_code, county, store_location
+  FROM `mi_proyecto_silver.ventas`
+);
+```
+
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva2.JPG)
+
+### 8. Modelado para Power BI
+#### Power Query
+
+Se llevó a cabo otro proceso de transformación y carga de datos utilizando Power Query, realizando una serie de ajustes y mejoras en los datos para su uso en Power BI.
+
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva3.JPG)
+
+El proceso incluyó los siguientes pasos:
+
+- **Renombrar columnas**: Se asignaron nombres más descriptivos a algunas columnas para mejorar la claridad y comprensión de los datos.
+- **Corrección de tipos de datos**: Se ajustaron los tipos de datos para asegurar que cada columna tuviera el formato adecuado (números, fechas, textos, etc.).
+- **Generación de columnas clave**: Se crearon columnas con claves numéricas para facilitar la identificación y relación entre diferentes tablas.
+- **Eliminación de duplicados**: Se eliminaron registros duplicados para garantizar la integridad y calidad de los datos.
+- **Tratamiento de datos nulos**: Se implementaron dos estrategias distintas para manejar los valores faltantes:
+  - En el caso de los **nombres de categorías**, se creó una dimensión adicional que contenía los nombres correspondientes a cada categoría.
+  - Para los **nombres de tiendas**, se revisó la tabla `fact_sales` y se identificó un nombre de tienda que no aparecía en la dimensión existente. Para solucionar esto, se generó nuevamente la dimensión `store` utilizando un *join* entre ambas tablas.
+
+Este proceso de transformación permitió preparar los datos de manera adecuada para su modelado y posterior análisis en Power BI.
+ 
+
 Esquema estrella en Power BI:
 - **Fact Table**: `facts_sales` - Datos de ventas.
 - **Dimensión**: `dim_product`, `dim_store`, `dim_vendor`, `dim_category`, `calendario`.
@@ -209,46 +283,3 @@ RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 
 ---
 
-### Archivo `queries.sql` (para las consultas SQL)
-
-```sql
--- Crear tabla ventas en la capa Silver
-CREATE OR REPLACE TABLE `mi_proyecto_silver.ventas` AS 
-SELECT * FROM `bronzelayer-433922.mi_proyecto_bronce.ventas`
-WHERE invoice_and_item_number IS NOT NULL
-  AND date IS NOT NULL
-  AND store_number IS NOT NULL
-  AND item_number IS NOT NULL
-  AND vendor_number IS NOT NULL
-  AND category IS NOT NULL;
-
--- Crear tabla de hechos (fact_sales)
-CREATE OR REPLACE TABLE `mi_proyecto_silver.fact_sales` AS 
-SELECT invoice_and_item_number, date, store_number, item_number, vendor_number, bottles_sold
-FROM `bronzelayer-433922.mi_proyecto_bronce.ventas`;
-
--- Crear tabla de proveedores (dim_vendor)
-CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_vendor` AS 
-SELECT SAFE_CAST(vendor_number AS INT64) AS vendor_number, vendor_name
-FROM (
-  SELECT DISTINCT vendor_number, vendor_name
-  FROM `mi_proyecto_silver.ventas`
-  WHERE SAFE_CAST(vendor_number AS FLOAT64) IS NOT NULL
-);
-
--- Crear tabla de productos (dim_product)
-CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_product` AS 
-SELECT SAFE_CAST(item_number AS INT64) AS item_number, item_description, category, pack, bottle_volume_ml, state_bottle_cost, state_bottle_retail
-FROM (
-  SELECT DISTINCT item_number, item_description, category, pack, bottle_volume_ml, state_bottle_cost, state_bottle_retail
-  FROM `mi_proyecto_silver.ventas`
-  WHERE SAFE_CAST(item_number AS FLOAT64) IS NOT NULL
-);
-
--- Crear tabla de tiendas (dim_store)
-CREATE OR REPLACE TABLE `mi_proyecto_silver.dim_store` AS 
-SELECT CAST(CAST(store_number AS FLOAT64) AS INT64) AS store_number, store_name, address, city, zip_code, county, store_location
-FROM (
-  SELECT DISTINCT store_number, store_name, address, city, zip_code, county, store_location
-  FROM `mi_proyecto_silver.ventas`
-);
