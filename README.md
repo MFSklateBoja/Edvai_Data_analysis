@@ -1,6 +1,24 @@
-Proyecto final EDVAI- análisis de ventas de licorerías en IOWA
+`Proyecto final EDVAI- análisis de ventas de licorerías en IOWA
 
 # Ventas de Iowa - Análisis de Datos
+
+# Índice del Proyecto Final
+
+- [Presentación de la Temática](#presentación-de-la-temática)
+- [Orígenes de la Información](#orígenes-de-la-información)
+- [Foco de Análisis](#foco-de-análisis)
+- [Descripción de la Base de Datos](#descripción-de-la-base-de-datos)
+- [Modelo de Entidades y Relaciones - Origen Bronze/Raw](#modelo-de-entidades-y-relaciones---origen-bronze-raw)
+- [Plan de Métricas](#plan-de-métricas)
+- [Proceso ETL](#proceso-etl)
+- [Modelo DER para Power BI](#modelo-der-para-power-bi)
+- [Principales Medidas en DAX](#principales-medidas-en-dax)
+- [Conclusiones o cumplimiento de hipótesis](#conclusiones-o-cumplimiento-de-hipótesis)
+- [Acceso del reporte](#acceso-del-reporte)
+- [Archivo `queries.sql`](#archivo-queriessql)
+
+
+
 
 ## 1. Presentación de la Temática
 La base de datos de "Ventas de Iowa" documenta transacciones comerciales en diversas categorías de productos en Iowa, Estados Unidos. El objetivo es proporcionar información sobre ventas, permitiendo análisis de patrones de consumo, rendimiento de productos y comportamiento de ventas por ubicación y temporalidad.
