@@ -59,7 +59,7 @@ La base de datos registra transacciones de bebidas alcohólicas. Los campos prin
 La capa raw incluye una tabla con las ventas en crudo para análisis geográfico y de inventario.
 
 ## 6. Plan de Métricas
-El plan incluye:
+El [plan de metricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0) incluye:
 - **Análisis de ventas**: total de ventas, variación temporal, precios promedio, costos, ganancia y rentabilidad.
 - **Indicadores geográficos**: ventas por región.
 - **Análisis de productos**: rotación de productos y margen de ganancia.
@@ -77,33 +77,117 @@ Esquema estrella en Power BI:
 - **Fact Table**: `facts_sales` - Datos de ventas.
 - **Dimensión**: `dim_product`, `dim_store`, `dim_vendor`, `dim_category`, `calendario`.
 
+
 ## 9. Principales Medidas en DAX
 Algunas de las medidas usadas en Power BI:
 
+### 1. **Ventas Totales (`#ventas`)**
 ```DAX
 #ventas = COUNT(fact_sales[invoice_and_item_number])
+```
+**Descripción**: Cuenta el número de ventas totales, considerando cada venta como una entrada única en la columna `invoice_and_item_number`.
+
+---
+
+### 2. **Total de Ventas en Dólares (`$Total_sales`)**
+```DAX
 $Total_sales = SUM(fact_sales[sale_dollars])
+```
+**Descripción**: Suma el total de las ventas en dólares de la columna `sale_dollars` en la tabla `fact_sales`.
+
+---
+
+### 3. **Número de Tiendas (`#tiendas`)**
+```DAX
 #tiendas = COUNT(dim_store[store_number])
+```
+**Descripción**: Cuenta cuántas tiendas únicas (`store_number`) están registradas en la tabla `dim_store`.
+
+---
+
+### 4. **Proveedores Activos (`#proveedores_activos`)**
+```DAX
 #proveedores_activos = DISTINCTCOUNT(fact_sales[vendor_number])
+```
+**Descripción**: Cuenta la cantidad de proveedores distintos que han realizado ventas, utilizando la columna `vendor_number` de la tabla `fact_sales`.
+
+---
+
+### 5. **Litros Vendidos (`#litros`)**
+```DAX
 #litros = SUM(fact_sales[volumen_sold_liters])
+```
+**Descripción**: Suma el total de litros vendidos, según la columna `volumen_sold_liters` de la tabla `fact_sales`.
+
+---
+
+### 6. **Precio Promedio por Producto (`$Precio_Promedio_Producto`)**
+```DAX
 $Precio_Promedio_Producto = AVERAGE(fact_sales[sale_dollars])
+```
+**Descripción**: Calcula el precio promedio de los productos vendidos, utilizando los datos de la columna `sale_dollars`.
+
+---
+
+### 7. **Ranking de Ventas (`RankingVentas`)**
+```DAX
 RankingVentas = RANKX(ALLSELECTED(fact_sales), [$Total_sales],, DESC)
+```
+**Descripción**: Crea un ranking de las ventas totales en función del valor de `Total_sales`. Ordena de mayor a menor (`DESC`).
+
+---
+
+### 8. **Ganancias Totales (`$Ganancias`)**
+```DAX
 $Ganancias = SUM(fact_sales[profit])
+```
+**Descripción**: Suma las ganancias totales de las ventas, utilizando la columna `profit`.
+
+---
+
+### 9. **Rentabilidad (`$rentabilidad`)**
+```DAX
 $rentabilidad = [$Ganancias] / [$Total_sales]
+```
+**Descripción**: Calcula el margen de rentabilidad, dividiendo las ganancias totales (`$Ganancias`) entre las ventas totales (`$Total_sales`).
+
+---
+
+### 10. **Ventas Promedio (`$Ventas_promedio`)**
+```DAX
 $Ventas_promedio = AVERAGE(fact_sales[sale_dollars])
+```
+**Descripción**: Calcula la venta promedio por transacción, tomando el promedio de la columna `sale_dollars`.
+
+---
+
+### 11. **Venta Máxima (`$max`)**
+```DAX
 $max = MAX(fact_sales[sale_dollars])
+```
+**Descripción**: Encuentra la venta más alta registrada en la columna `sale_dollars`.
+
+---
+
+### 12. **Fecha de Mayor Venta (`MaxSalesDate`)**
+```DAX
 MaxSalesDate = VAR MaxSales = CALCULATE(MAX(fact_sales[sale_dollars]))
 RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 ```
+**Descripción**: Encuentra la fecha de la venta más alta, primero identificando la venta máxima y luego devolviendo la fecha correspondiente a esa venta en la columna `date`.
 
 ## 10.	Conclusiones o cumplimiento de hipótesis
-•	Aumento de ventas en eventos festivos y campañas de marketing: Se observa un incremento significativo en las ventas durante eventos festivos o feriados. Además, algunos productos experimentan picos en días específicos debido a campañas de marketing dirigidas, mostrando el impacto de la promoción estratégica.
-•	Tendencias semanales de ventas: A lo largo de la semana, las ventas siguen un patrón claro: los días miércoles y jueves son los más fuertes, probablemente como resultado de campañas promocionales. En contraste, las ventas caen drásticamente durante los fines de semana, posiblemente debido a que muchas tiendas permanecen cerradas.
-•	Variación de ventas en los últimos años: Aunque la rentabilidad se ha mantenido, las ventas han disminuido considerablemente en los últimos cuatro años. Históricamente, los meses de diciembre y junio mostraban un aumento significativo en las ventas, pero esta tendencia cambió a partir de 2018, con un mayor consumo al inicio del año. A pesar de estas variaciones, los días de mayor venta no han cambiado.
-•	Variaciones regionales en la demanda: La demanda de productos varía considerablemente según la región de Iowa. El condado de Polk ha mantenido consistentemente el mayor volumen de ventas, lo cual se corresponde con la mayor concentración de tiendas en esa área.
-•	Proveedores clave en el mercado: Un grupo reducido de proveedores es responsable de la mayoría de las ventas, destacándose como líderes en el rubro.
-•	Rotación de productos por categoría: Los productos de menor precio tienden a tener una rotación más alta, lo que significa que las categorías más vendidas no coinciden necesariamente con los artículos más costosos.
-•	Presentación de productos: En su mayoría, los productos se venden en packs de 6 o 12 botellas, con tamaños que generalmente no superan el litro.
+-	Aumento de ventas en eventos festivos y campañas de marketing: Se observa un incremento significativo en las ventas durante eventos festivos o feriados. Además, algunos productos experimentan picos en días específicos debido a campañas de marketing dirigidas, mostrando el impacto de la promoción estratégica.
+-	Tendencias semanales de ventas: A lo largo de la semana, las ventas siguen un patrón claro: los días miércoles y jueves son los más fuertes, probablemente como resultado de campañas promocionales. En contraste, las ventas caen drásticamente durante los fines de semana, posiblemente debido a que muchas tiendas permanecen cerradas.
+-	Variación de ventas en los últimos años: Aunque la rentabilidad se ha mantenido, las ventas han disminuido considerablemente en los últimos cuatro años. Históricamente, los meses de diciembre y junio mostraban un aumento significativo en las ventas, pero esta tendencia cambió a partir de 2018, con un mayor consumo al inicio del año. A pesar de estas variaciones, los días de mayor venta no han cambiado.
+-	Variaciones regionales en la demanda: La demanda de productos varía considerablemente según la región de Iowa. El condado de Polk ha mantenido consistentemente el mayor volumen de ventas, lo cual se corresponde con la mayor concentración de tiendas en esa área.
+-	Proveedores clave en el mercado: Un grupo reducido de proveedores es responsable de la mayoría de las ventas, destacándose como líderes en el rubro.
+-	Rotación de productos por categoría: Los productos de menor precio tienden a tener una rotación más alta, lo que significa que las categorías más vendidas no coinciden necesariamente con los artículos más costosos.
+-	Presentación de productos: En su mayoría, los productos se venden en packs de 6 o 12 botellas, con tamaños que generalmente no superan el litro.
+
+## Acceso del reporte
+[Link al reporte](https://app.powerbi.com/view?r=eyJrIjoiNDZmYmI1NDYtNjQ4MC00ZDA0LWFiOWEtZGY4NzBiMzBmNGNkIiwidCI6ImJjMjA1YTI0LTAxOWUtNDE5OC05MmFjLWVhYWRhODVmZTFiMiIsImMiOjR9)
+
 
 ---
 
