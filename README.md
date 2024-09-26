@@ -14,8 +14,8 @@
 - [Modelo DER para Power BI](#modelo-der-para-power-bi)
 - [Principales Medidas en DAX](#principales-medidas-en-dax)
 - [Conclusiones o cumplimiento de hipótesis](#conclusiones-o-cumplimiento-de-hipótesis)
-- [Acceso del reporte](#acceso-del-reporte)
-- [Archivo `queries.sql`](#archivo-queriessql)
+- [Links](#Links)
+
 
 
 ## 1. Presentación de la Temática
@@ -144,6 +144,10 @@ FROM (
 ```
 
 ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva2.JPG)
+
+
+El modelo DER preliminar de la capa silver es el siguiente:
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/DER_silver.png)
 
 ### 8. Modelado para Power BI
 #### Power Query
@@ -277,9 +281,12 @@ RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 -	Rotación de productos por categoría: Los productos de menor precio tienden a tener una rotación más alta, lo que significa que las categorías más vendidas no coinciden necesariamente con los artículos más costosos.
 -	Presentación de productos: En su mayoría, los productos se venden en packs de 6 o 12 botellas, con tamaños que generalmente no superan el litro.
 
-## Acceso del reporte
+## Links
 [Link al reporte](https://app.powerbi.com/view?r=eyJrIjoiNDZmYmI1NDYtNjQ4MC00ZDA0LWFiOWEtZGY4NzBiMzBmNGNkIiwidCI6ImJjMjA1YTI0LTAxOWUtNDE5OC05MmFjLWVhYWRhODVmZTFiMiIsImMiOjR9)
 
+[Link al plan de métricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0)
+
+[Link al archivo sql](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/queries.sql)
 
 ---
 
