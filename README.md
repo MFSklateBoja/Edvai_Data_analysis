@@ -165,17 +165,38 @@ El proceso incluyó los siguientes pasos:
 - **Tratamiento de datos nulos**: Se implementaron dos estrategias distintas para manejar los valores faltantes:
   - En el caso de los **nombres de categorías**, se creó una dimensión adicional que contenía los nombres correspondientes a cada categoría.
   - Para los **nombres de tiendas**, se revisó la tabla `fact_sales` y se identificó un nombre de tienda que no aparecía en la dimensión existente. Para solucionar esto, se generó nuevamente la dimensión `store` utilizando un *join* entre ambas tablas.
+   - **Creación de la tabla calendario**, se creó la dimension calendario a través de la DAX correspondiente. Esta tabla permite realizar análisis detallados basados en fechas dentro del modelo de Power BI.
+       ```DAX
+       Calendario = 
+          ADDCOLUMNS (
+              CALENDAR (MIN(fact_sales[date]), MAX(fact_sales[date])),  // Basada en la columna de fechas de Orders
+              "Año", YEAR([Date]),
+              "Mes", MONTH([Date]),
+              "Nombre del Mes", FORMAT([Date], "MMMM", "es-ES"),  // Formato en español
+              "Día", DAY([Date]),
+              "Trimestre", QUARTER([Date]),
+              "Día de la Semana", WEEKDAY([Date], 2),  // Lunes como primer día
+              "Nombre del Día", FORMAT([Date], "dddd", "es-ES")  // Formato en español
+          )
+       ```
+       ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva6.JPG)
+
 
 Este proceso de transformación permitió preparar los datos de manera adecuada para su modelado y posterior análisis en Power BI.
  
-
-Esquema estrella en Power BI:
+Esquema estrella/copo de nieve en Power BI:
 - **Fact Table**: `facts_sales` - Datos de ventas.
 - **Dimensión**: `dim_product`, `dim_store`, `dim_vendor`, `dim_category`, `calendario`.
 
+Cabe aclarar que al agregar la dimensión categoría se paso de un esquema de estrella a uno tipo copo de nieve.
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva8.JPG)
+Resultando de esta manera el DER que constituye la capa Gold del modelo:
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva9.JPG)
 
 ## 9. Principales Medidas en DAX
-Algunas de las medidas usadas en Power BI:
+Las medidas usadas en Power BI se agruparon en la tabla de medidas. En ellas sse encuentran todas las medidas planteadas en el plan de métricas.
+
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva7.JPG)
 
 ### 1. **Ventas Totales (`#ventas`)**
 ```DAX
