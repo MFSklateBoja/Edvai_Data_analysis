@@ -294,13 +294,37 @@ RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 **Descripción**: Encuentra la fecha de la venta más alta, primero identificando la venta máxima y luego devolviendo la fecha correspondiente a esa venta en la columna `date`.
 
 ## 10.	Conclusiones o cumplimiento de hipótesis
--	Aumento de ventas en eventos festivos y campañas de marketing: Se observa un incremento significativo en las ventas durante eventos festivos o feriados. Además, algunos productos experimentan picos en días específicos debido a campañas de marketing dirigidas, mostrando el impacto de la promoción estratégica.
+-	Aumento de ventas en eventos festivos y campañas de marketing: Se observa un incremento significativo en las ventas durante los meses de julio y diciembre. Sin embargo, la fecha de ventas máxima se encuentra fuera de estos periodos, pudiendo corresponderse al efecto de una campaña de marketing.
 -	Tendencias semanales de ventas: A lo largo de la semana, las ventas siguen un patrón claro: los días miércoles y jueves son los más fuertes, probablemente como resultado de campañas promocionales. En contraste, las ventas caen drásticamente durante los fines de semana, posiblemente debido a que muchas tiendas permanecen cerradas.
+![image](https://github.com/user-attachments/assets/f5cfcd63-a5de-4584-85d2-d87564b57d0f)
 -	Variación de ventas en los últimos años: Aunque la rentabilidad se ha mantenido, las ventas han disminuido considerablemente en los últimos cuatro años. Históricamente, los meses de diciembre y junio mostraban un aumento significativo en las ventas, pero esta tendencia cambió a partir de 2018, con un mayor consumo al inicio del año. A pesar de estas variaciones, los días de mayor venta no han cambiado.
+
+
+![ventas2012-2017](https://github.com/user-attachments/assets/80b00069-0614-423a-90d7-b2ccbcdc70cb)
+![ventas2018-2024](https://github.com/user-attachments/assets/49570af7-ccc5-4608-9745-bc1b38305cb7)
+
+
+
 -	Variaciones regionales en la demanda: La demanda de productos varía considerablemente según la región de Iowa. El condado de Polk ha mantenido consistentemente el mayor volumen de ventas, lo cual se corresponde con la mayor concentración de tiendas en esa área.
+
+
+
+![ventas_region](https://github.com/user-attachments/assets/4222de69-b6ba-4fab-b6da-272031486ad4)
+
+
 -	Proveedores clave en el mercado: Un grupo reducido de proveedores es responsable de la mayoría de las ventas, destacándose como líderes en el rubro.
+
+![proveedores](https://github.com/user-attachments/assets/ee15850d-b36f-4edd-9fae-6804744a208c)
+
 -	Rotación de productos por categoría: Los productos de menor precio tienden a tener una rotación más alta, lo que significa que las categorías más vendidas no coinciden necesariamente con los artículos más costosos.
 -	Presentación de productos: En su mayoría, los productos se venden en packs de 6 o 12 botellas, con tamaños que generalmente no superan el litro.
+
+![categoriamasvendida](https://github.com/user-attachments/assets/d80b9362-450d-409e-bb73-1afc85ded893)
+![productomascaros](https://github.com/user-attachments/assets/dc0af93f-9af8-432e-96ad-7675af018a20)
+
+- Para realizar un análisis en mayor profundidad de los datos será necesario un tratamiento exhaustivo de los datos faltantes. En el caso de las tiendas sin condado se les asignaron el termino "sin asignar", resultando una gran cantidad de tiendas bajo esta region. Este inconveniente puede ser resuelto a través la localización de las tiendas buscandolas por su nombre. En el caso de los productos, existe una gran cantidad que no tienen categoría asignada. Por lo cual, es necesario generar un mayor número de categorias que abarquen estos productos.
+
+
 
 ## Links
 [Link al reporte](https://app.powerbi.com/view?r=eyJrIjoiNDZmYmI1NDYtNjQ4MC00ZDA0LWFiOWEtZGY4NzBiMzBmNGNkIiwidCI6ImJjMjA1YTI0LTAxOWUtNDE5OC05MmFjLWVhYWRhODVmZTFiMiIsImMiOjR9)
