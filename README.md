@@ -30,7 +30,7 @@ Los datos son públicos y se encuentran en BigQuery, recopilando información de
 ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/iowa.JPG)
 
 ## 3. Plan de Métricas
-El [plan de metricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0) incluye:
+El [plan de metricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/Plan%20de%20m%C3%A9tricas.xlsx) incluye:
 - **Análisis de ventas**: total de ventas, variación temporal, precios promedio, costos, ganancia y rentabilidad.
 - **Indicadores geográficos**: ventas por región.
 - **Análisis de productos**: rotación de productos y margen de ganancia.
@@ -305,7 +305,7 @@ RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 ## Links
 [Link al reporte](https://app.powerbi.com/view?r=eyJrIjoiNDZmYmI1NDYtNjQ4MC00ZDA0LWFiOWEtZGY4NzBiMzBmNGNkIiwidCI6ImJjMjA1YTI0LTAxOWUtNDE5OC05MmFjLWVhYWRhODVmZTFiMiIsImMiOjR9)
 
-[Link al plan de métricas](https://docs.google.com/spreadsheets/d/1aYBH1_ziC2YjgaCywD18HCrKz9C-4L-bUsMoXsMJokk/edit?gid=0#gid=0)
+[Link al plan de métricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/Plan%20de%20m%C3%A9tricas.xlsx)
 
 [Link al archivo sql](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/queries.sql)
 
