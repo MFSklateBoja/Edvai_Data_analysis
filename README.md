@@ -4,17 +4,18 @@
 
 # Índice del Proyecto Final
 
-- [Presentación de la Temática](#presentación-de-la-temática)
-- [Orígenes de la Información](#orígenes-de-la-información)
-- [Foco de Análisis](#foco-de-análisis)
-- [Descripción de la Base de Datos](#descripción-de-la-base-de-datos)
-- [Modelo de Entidades y Relaciones - Origen Bronze/Raw](#modelo-de-entidades-y-relaciones---origen-bronze-raw)
-- [Plan de Métricas](#plan-de-métricas)
+- [Presentación de la Temática](#presentacion-de-la-tematica)
+- [Orígenes de la Información](#origenes-de-la-informacion)
+- [Foco de Análisis](#foco-de-analisis)
+- [Descripción de la Base de Datos](#descripcion-de-la-base-de-datos)
+- [Modelo de Entidades y Relaciones - Origen Bronze/Raw](#modelo-de-entidades-y-relaciones---origen-bronzeraw)
+- [Plan de Métricas](#plan-de-metricas)
 - [Proceso ETL](#proceso-etl)
 - [Modelo DER para Power BI](#modelo-der-para-power-bi)
 - [Principales Medidas en DAX](#principales-medidas-en-dax)
-- [Conclusiones o cumplimiento de hipótesis](#conclusiones-o-cumplimiento-de-hipótesis)
-- [Links](#Links)
+- [Conclusiones o cumplimiento de hipótesis](#conclusiones-o-cumplimiento-de-hipotesis)
+- [Links](#links)
+
 
 
 
