@@ -27,7 +27,8 @@ Los datos son públicos y se encuentran en BigQuery, recopilando información de
 - Inventario de tiendas en Iowa.
 - Información demográfica y geolocalización.
 
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/iowa.JPG)
+![alt text](./imagenes/iowa.JPG)
+
 
 ## 3. Plan de Métricas
 El [plan de metricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/Plan%20de%20m%C3%A9tricas.xlsx) incluye:
