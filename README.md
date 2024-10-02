@@ -30,7 +30,7 @@ Los datos son públicos y se encuentran en BigQuery, recopilando información de
 ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/iowa.JPG)
 
 ## 3. Plan de Métricas
-El [plan de metricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/Plan%20de%20m%C3%A9tricas.xlsx) incluye:
+El [plan de metricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/Plan%20de%20m%C3%A9tricas.xlsx) incluye:
 - **Análisis de ventas**: total de ventas, variación temporal, precios promedio, costos, ganancia y rentabilidad.
 - **Indicadores geográficos**: ventas por región.
 - **Análisis de productos**: rotación de productos y margen de ganancia.
@@ -80,12 +80,12 @@ La base de datos registra transacciones de bebidas alcohólicas. Los campos prin
 | Sale (Dollars)     | Monto total de la venta en dólares                             |
 | Volume Sold (Liters)| Volumen total vendido en litros                                |
  
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva1.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva1.JPG)
 
 ## 6. Transformación y carga de datos:
 El proyecto se estructura bajo una arquitectura Medallion (capas Bronze, Silver y Gold), como se represente en el sgte esquema.
 
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva5.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva5.JPG)
 
 ## 7. Proceso ETL - capa silver
 En la capa Silver se organizó la información en diferentes tablas, para lo cual se generaron sentencias DDL.
@@ -143,18 +143,18 @@ FROM (
 );
 ```
 
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva2.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva2.JPG)
 
 
 El modelo DER preliminar de la capa silver es el siguiente:
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/DER_silver.png)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/DER_silver.png)
 
 ### 8. Modelado para Power BI
 #### Power Query
 
 Se llevó a cabo otro proceso de transformación y carga de datos utilizando Power Query, realizando una serie de ajustes y mejoras en los datos para su uso en Power BI.
 
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva3.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva3.JPG)
 
 El proceso incluyó los siguientes pasos:
 
@@ -179,7 +179,7 @@ El proceso incluyó los siguientes pasos:
               "Nombre del Día", FORMAT([Date], "dddd", "es-ES")  // Formato en español
           )
        ```
-       ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva6.JPG)
+       ![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva6.JPG)
 
 
 Este proceso de transformación permitió preparar los datos de manera adecuada para su modelado y posterior análisis en Power BI.
@@ -189,14 +189,14 @@ Esquema estrella/copo de nieve en Power BI:
 - **Dimensión**: `dim_product`, `dim_store`, `dim_vendor`, `dim_category`, `calendario`.
 
 Cabe aclarar que al agregar la dimensión categoría se paso de un esquema de estrella a uno tipo copo de nieve.
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva8.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva8.JPG)
 Resultando de esta manera el DER que constituye la capa Gold del modelo:
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva9.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva9.JPG)
 
 ## 9. Principales Medidas en DAX
 Las medidas usadas en Power BI se agruparon en la tabla de medidas. En ellas sse encuentran todas las medidas planteadas en el plan de métricas.
 
-![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/imagenes/Diapositiva7.JPG)
+![alt text](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/imagenes/Diapositiva7.JPG)
 
 ### 1. **Ventas Totales (`#ventas`)**
 ```DAX
@@ -329,9 +329,9 @@ RETURN CALCULATE(MAX(fact_sales[date]), fact_sales[sale_dollars] = MaxSales)
 ## Links
 [Link al reporte](https://app.powerbi.com/view?r=eyJrIjoiNDZmYmI1NDYtNjQ4MC00ZDA0LWFiOWEtZGY4NzBiMzBmNGNkIiwidCI6ImJjMjA1YTI0LTAxOWUtNDE5OC05MmFjLWVhYWRhODVmZTFiMiIsImMiOjR9)
 
-[Link al plan de métricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/Plan%20de%20m%C3%A9tricas.xlsx)
+[Link al plan de métricas](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/Plan%20de%20m%C3%A9tricas.xlsx)
 
-[Link al archivo sql](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/main/queries.sql)
+[Link al archivo sql](https://github.com/MFSklateBoja/Edvai_Data_analysis/blob/gh-pages/queries.sql)
 
 ---
 
